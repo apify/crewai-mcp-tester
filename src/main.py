@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import os
+
 from apify import Actor
 from crewai import Crew, Task
 from pydantic import BaseModel, Field
@@ -12,22 +14,30 @@ from mcp import StdioServerParameters
 
 from crewai import LLM
 
-from src.const import LLM_MODEL, MCP_CONNECT_TIMEOUT
-from .billing import charge_tokens
+from src.const import LLM_API_BASE_URL, LLM_MODEL, MCP_CONNECT_TIMEOUT
 
 # Define the structured output schema for LLM (excluding mcpUrl)
 class MCPTestResult(BaseModel):
     worksCorrectly: bool = Field(description="Whether the MCP server works correctly")
     report: str = Field(description="Detailed test report with findings")
 
-llm = LLM(
-    model=LLM_MODEL,
-    temperature=0.0,
-)
 
 async def main() -> None:
     """Main entry point for the Apify Actor."""
     async with Actor:
+        apify_token = os.getenv('APIFY_TOKEN', '')
+        if not apify_token:
+            raise ValueError("APIFY_TOKEN environment variable must be set for authentication.")
+
+        llm = LLM(
+            model=LLM_MODEL,
+            temperature=0.0,
+            api_base=LLM_API_BASE_URL,
+            api_key="no-key-required-but-must-not-be-empty",
+            extra_headers={
+                "Authorization": f"Bearer {apify_token}",
+            }
+        )
         actor_input = await Actor.get_input() or {}
         mcp_url = actor_input.get('mcpUrl')
         headers = actor_input.get('headers', {})
@@ -98,15 +108,7 @@ async def main() -> None:
             output_tokens = result.token_usage.completion_tokens
             total_tokens = input_tokens + output_tokens
             Actor.log.info(f"Input tokens: {input_tokens}, Output tokens: {output_tokens}, Total tokens: {total_tokens}")
-
-            # Charge for token usage
-            try:
-                await charge_tokens(input_tokens, output_tokens)
-                Actor.log.info("Successfully charged for token usage")
-            except Exception as e:
-                Actor.log.error(f"Failed to charge for tokens: {e}")
-                # Don't fail the entire run if charging fails
-            
+ 
             # Access structured output
             if hasattr(result, 'pydantic') and result.pydantic:
                 structured_result = result.pydantic
