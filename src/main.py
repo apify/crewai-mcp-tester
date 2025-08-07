@@ -58,8 +58,8 @@ async def main() -> None:
                 goal="Run a simple test on each available MCP server tool and provide a final verdict on whether the MCP server works correctly.",
                 backstory="A seasoned MCP tester agent with extensive experience in testing MCP servers.",
                 tools=mcp_tools,
-                reasoning=True,
-                verbose=True
+                reasoning=False,
+                verbose=False
             )
 
             task = Task(
@@ -71,6 +71,10 @@ async def main() -> None:
                     2. Verify that each tool responds correctly and as expected
                     3. Document any errors or unexpected behavior
                     
+                    Requirements in order to pass:
+                    - All tools must respond correctly without errors
+                    - If being rate limited, try again up to 3 times, if still rate limited, document the issue and consider it a failure
+
                     Provide a comprehensive assessment of the MCP server's functionality.
                     
                     You must return your results in the exact format specified by the output schema.
