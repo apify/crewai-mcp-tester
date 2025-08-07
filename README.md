@@ -32,7 +32,7 @@ Automated testing tool for Model Context Protocol (MCP) servers. Tests available
 
 ## 💰 Pricing
 
-You will be charged based on LLM token usage. For a simple MCP server with a few tools, the cost should be under $0.01 per test run.
+You will be charged based on LLM token usage. For a simple MCP server with a few tools, the cost should be under $0.05 per test run.
 
 ## 💾 Input
 
