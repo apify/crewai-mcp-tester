@@ -80,3 +80,7 @@ For MCP servers requiring authentication:
   }
 }
 ```
+
+## Open Source
+
+This Actor is open source and available on [GitHub](https://github.com/apify/crewai-mcp-tester).
