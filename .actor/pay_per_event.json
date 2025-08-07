@@ -1,0 +1,13 @@
+{
+    "gpt-4-1-mini-input-tokens-100": {
+        "eventTitle": "Flat fee for 100 input tokens",
+        "eventDescription": "Flat fee for processing 100 input tokens",
+        "eventPriceUsd": 0.000048
+    },
+    "gpt-4-1-mini-output-tokens-100": {
+        "eventTitle": "Flat fee for 100 output tokens",
+        "eventDescription": "Flat fee for processing 100 output tokens",
+        "eventPriceUsd": 0.000192
+    }
+}
+

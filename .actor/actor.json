@@ -1,0 +1,15 @@
+{
+	"actorSpecification": 1,
+	"name": "crewai-mcp-tester",
+	"title": "CrewAI MCP Tester",
+	"description": "Automated MCP server testing tool. Connects to Model Context Protocol servers, tests available tools using AI, and generates detailed reports with pass/fail status. Supports custom authentication headers.",
+	"version": "0.1",
+	"buildTag": "latest",
+	"environmentVariables": {},
+	"input": "./input_schema.json",
+	"storages": {
+		"dataset": "./dataset_schema.json"
+	},
+	"dockerfile": "./Dockerfile"
+}
+

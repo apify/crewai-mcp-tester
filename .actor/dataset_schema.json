@@ -1,0 +1,32 @@
+{
+  "actorSpecification": 1,
+  "views": {
+    "overview": {
+      "title": "Overview",
+      "transformation": {
+        "fields": [
+            "mcpUrl",
+            "worksCorrectly",
+            "report"
+        ]
+      },
+      "display": {
+        "component": "table",
+        "properties": {
+          "mcpUrl": {
+            "label": "MCP URL",
+            "format": "text"
+          },
+          "worksCorrectly": {
+            "label": "Works correctly",
+            "format": "boolean"
+          },
+          "report": {
+            "label": "Report",
+            "format": "text"
+          }
+        }
+      }
+    }
+  }
+}
