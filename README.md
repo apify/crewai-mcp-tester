@@ -1,4 +1,4 @@
-# MCP Server Tester
+# CrewAI MCP Tester
 
 Automated testing tool for Model Context Protocol (MCP) servers. Tests available tools and generates reports on functionality and reliability.
 
@@ -19,8 +19,8 @@ Automated testing tool for Model Context Protocol (MCP) servers. Tests available
 | Field | Type | Description |
 |-------|------|-------------|
 | `mcpUrl` | String | The tested MCP server URL |
-| `worksCorrectly` | Boolean | Overall pass/fail status of the MCP server |
-| `report` | String | Detailed test report with findings, errors, and recommendations |
+| `allTestsPassed` | Boolean | Overall pass/fail status of all MCP server tests |
+| `toolsStatus` | Object | Detailed status of each tool with passed boolean and detail string |
 
 ## 🚀 Usage
 
@@ -59,8 +59,33 @@ The Actor returns structured data in JSON format:
 ```json
 {
   "mcpUrl": "https://mcp.apify.com",
-  "worksCorrectly": true,
-  "report": "Testing of MCP server tools was conducted as follows..."
+  "allTestsPassed": true,
+  "toolsStatus": {
+    "get-actor-details": {
+      "passed": true,
+      "detail": "Successfully retrieved detailed information about the actor 'apify/proxy-test'."
+    },
+    "search-actors": {
+      "passed": true,
+      "detail": "Successfully searched for actors with the keyword 'test' and received valid results."
+    },
+    "search-apify-docs": {
+      "passed": true,
+      "detail": "Successfully searched Apify documentation for the keyword 'test' and received relevant documentation links."
+    },
+    "fetch-apify-docs": {
+      "passed": true,
+      "detail": "Successfully fetched full content of an Apify documentation page about automated testing."
+    },
+    "add-actor": {
+      "passed": true,
+      "detail": "Successfully added the actor 'apify/proxy-test' to the available tools."
+    },
+    "apify-slash-rag-web-browser": {
+      "passed": true,
+      "detail": "Successfully ran a basic operation querying 'san francisco weather' and received results without errors."
+    }
+  }
 }
 ```
 
@@ -82,3 +107,10 @@ For MCP servers requiring authentication:
 ## 🌐 Open Source
 
 This Actor is open source and available on [GitHub](https://github.com/apify/crewai-mcp-tester).
+
+## Resources
+
+- [Apify Actor CrewAI template](https://apify.com/templates/python-crewai)
+- [How to Build an AI Agent with CrewAI](https://blog.apify.com/how-to-build-an-ai-agent/)
+- [How to use MCP with Apify Actors](https://blog.apify.com/how-to-use-mcp/)
+- [Webinar: Building and monetizing MCP servers on Apify](https://www.youtube.com/watch?v=w3AH3jIrXXo)

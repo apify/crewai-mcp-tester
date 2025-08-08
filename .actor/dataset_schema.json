@@ -6,8 +6,8 @@
       "transformation": {
         "fields": [
             "mcpUrl",
-            "worksCorrectly",
-            "report"
+            "allTestsPassed",
+            "toolsStatus"
         ]
       },
       "display": {
@@ -17,13 +17,13 @@
             "label": "MCP URL",
             "format": "text"
           },
-          "worksCorrectly": {
-            "label": "Works correctly",
+          "allTestsPassed": {
+            "label": "All Tests Passed",
             "format": "boolean"
           },
-          "report": {
-            "label": "Report",
-            "format": "text"
+          "toolsStatus": {
+            "label": "Tools Status",
+            "format": "object"
           }
         }
       }

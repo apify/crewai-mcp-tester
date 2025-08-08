@@ -7,6 +7,7 @@ import os
 from apify import Actor
 from crewai import Crew, Task
 from pydantic import BaseModel, Field
+from typing import Dict
 
 from crewai import Agent
 from crewai_tools import MCPServerAdapter
@@ -16,10 +17,18 @@ from crewai import LLM
 
 from src.const import LLM_API_BASE_URL, LLM_MODEL, MCP_CONNECT_TIMEOUT
 
+# Define the tool status structure
+class ToolStatus(BaseModel):
+    passed: bool = Field(description="Whether the tool test passed")
+    detail: str = Field(description="Testing scenario description or explanation of failure")
+
 # Define the structured output schema for LLM (excluding mcpUrl)
 class MCPTestResult(BaseModel):
-    worksCorrectly: bool = Field(description="Whether the MCP server works correctly")
-    report: str = Field(description="Detailed test report with findings")
+    allTestsPassed: bool = Field(description="Whether all MCP server tests passed")
+    toolsStatus: Dict[str, ToolStatus] = Field(
+        description="Status of each tool with passed boolean and detail string",
+        default_factory=dict
+    )
 
 
 async def main() -> None:
@@ -77,22 +86,30 @@ async def main() -> None:
                     Test the MCP server and its available tools.
                     
                     For each available MCP server tool:
-                    1. Run a basic operation to test functionality
-                    2. Verify that each tool responds correctly and as expected
-                    3. Document any errors or unexpected behavior
+                    1. Run a basic operation to test its functionality.
+                    2. Verify that each tool responds correctly and as expected.
+                    3. Document any errors or unexpected behavior.
+                    4. Record the status of each tool individually with detailed results.
                     
-                    Requirements in order to pass:
-                    - All tools must respond correctly without errors
-                    - If being rate limited, try again up to 3 times, if still rate limited, document the issue and consider it a failure
+                    Requirements to pass:
+                    - All tools must respond correctly without errors.
+                    - If rate limited, try again up to 3 times; if still rate limited, document the issue and consider it a failure.
+                    - For each tool, record both whether it passed (true/false) and details:
+                      - If passed: the detail should be the testing scenario description.
+                      - If failed: the detail should explain why it failed.
 
                     Provide a comprehensive assessment of the MCP server's functionality.
                     
                     You must return your results in the exact format specified by the output schema.
+
+                    You must test only the tools listed below and nothing else: {", ".join([tool.name for tool in mcp_tools])}
                 """,
                 expected_output="""
                     A structured test result containing:
-                    - worksCorrectly: Boolean indicating overall success/failure
-                    - report: Detailed summary of all tests performed, results, and final verdict
+                    - allTestsPassed: Boolean indicating overall success or failure.
+                    - toolsStatus: Dictionary mapping each tool name to an object with:
+                      - passed: Boolean (true if working, false if not).
+                      - detail: String (testing scenario description, or explanation of failure).
                 """,
                 agent=tool_agent,
                 output_pydantic=MCPTestResult
@@ -112,14 +129,19 @@ async def main() -> None:
             # Access structured output
             if hasattr(result, 'pydantic') and result.pydantic:
                 structured_result = result.pydantic
-                Actor.log.info(f"MCP works Correctly: {structured_result.worksCorrectly}")
-                Actor.log.info(f"Report: {structured_result.report}")
+                Actor.log.info(f"All tests passed: {structured_result.allTestsPassed}")
+                Actor.log.info(f"Tools Status: {structured_result.toolsStatus}")
+
+                # Deserialize toolsStatus from ToolStatus objects to dictionaries
+                tools_status_dict = {}
+                for tool_name, tool_status in structured_result.toolsStatus.items():
+                    tools_status_dict[tool_name] = tool_status.dict()
 
                 # Save structured data to Apify dataset
                 await Actor.push_data({
                     "mcpUrl": mcp_url,
-                    "worksCorrectly": structured_result.worksCorrectly,
-                    "report": structured_result.report
+                    "allTestsPassed": structured_result.allTestsPassed,
+                    "toolsStatus": tools_status_dict
                 })
             else:
                 # Fallback to raw output if structured parsing fails
