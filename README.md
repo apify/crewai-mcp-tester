@@ -1,6 +1,13 @@
 # CrewAI MCP Tester
 
-Automated testing tool for Model Context Protocol (MCP) servers. Tests available tools and generates reports on functionality and reliability.
+It is important to ensure that your MCP server is functioning correctly and that all tools are available and working as expected. This Actor automates the manual testing process and provides a detailed report on the status of each tool.
+
+Since MCP servers are often used in agentic-based applications, it is essential to test the MCP server using an agentic approach.
+
+It is important to ensure that your MCP server is functioning correctly and that all tools are available and working as expected.
+This Actor automates the manual testing process, providing a detailed report on the status of each tool.
+
+More importantly, since MCP servers are often used in Agentic based application, it is obvious that the MCP server should be tested using an agentic approach.
 
 > **ℹ️ Notice:**  
 > This Actor internally uses the [Apify Openrouter Actor](https://apify.com/apify/openrouter) to call an LLM. You will be billed for LLM usage through this Actor.
