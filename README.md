@@ -26,7 +26,7 @@ Automated testing tool for Model Context Protocol (MCP) servers. Tests available
 
 1. Navigate to the Actor page
 2. Provide the MCP server URL
-3. Add authentication headers if required
+3. Add authentication headers for the MCP server (if required)
 4. Start the test
 5. Review the generated report
 
