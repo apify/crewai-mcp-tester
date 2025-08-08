@@ -1,0 +1,32 @@
+{
+  "actorSpecification": 1,
+  "views": {
+    "overview": {
+      "title": "Overview",
+      "transformation": {
+        "fields": [
+            "mcpUrl",
+            "allTestsPassed",
+            "toolsStatus"
+        ]
+      },
+      "display": {
+        "component": "table",
+        "properties": {
+          "mcpUrl": {
+            "label": "MCP URL",
+            "format": "text"
+          },
+          "allTestsPassed": {
+            "label": "All Tests Passed",
+            "format": "boolean"
+          },
+          "toolsStatus": {
+            "label": "Tools Status",
+            "format": "object"
+          }
+        }
+      }
+    }
+  }
+}

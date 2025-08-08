@@ -1,0 +1,23 @@
+{
+  "title": "CrewAI MCP Tester Input Schema",
+  "type": "object",
+  "schemaVersion": 1,
+  "properties": {
+    "mcpUrl": {
+      "sectionCaption": "MCP server url",
+      "title": "MCP server url",
+      "description": "The URL of the Model Context Protocol server to test.",
+      "prefill": "https://mcp.apify.com",
+      "editor": "textfield",
+      "type": "string"
+    },
+    "headers": {
+      "title": "HTTP headers",
+      "description": "Optional HTTP headers to send to the MCP server (as a JSON object). This field is secret and will be stored encrypted.",
+      "type": "object",
+      "editor": "json",
+      "isSecret": true
+    }
+  },
+  "required": []
+}
