@@ -51,8 +51,9 @@ async def main() -> None:
         mcp_url = actor_input.get('mcpUrl')
         headers = actor_input.get('headers', {})
         if not mcp_url:
-            Actor.log.error('MCP URL is required in the input.')
-            Actor.set_status_message('MCP URL is required in the input.')
+            msg = 'You need to provide the MCP URL in the input as "mcpUrl".'
+            Actor.log.error(msg)
+            await Actor.set_status_message(msg)
             return
 
 
@@ -125,19 +126,20 @@ async def main() -> None:
             output_tokens = result.token_usage.completion_tokens
             total_tokens = input_tokens + output_tokens
             Actor.log.info(f"Input tokens: {input_tokens}, Output tokens: {output_tokens}, Total tokens: {total_tokens}")
- 
+
             # Access structured output
             if hasattr(result, 'pydantic') and result.pydantic:
                 structured_result = result.pydantic
                 Actor.log.info(f"All tests passed: {structured_result.allTestsPassed}")
-                Actor.log.info(f"Tools Status: {structured_result.toolsStatus}")
+                Actor.log.info(f"Tested tools: {len(structured_result.toolsStatus)}/{len(mcp_tools)}")
 
                 # Deserialize toolsStatus from ToolStatus objects to dictionaries
                 tools_status_dict = {}
                 for tool_name, tool_status in structured_result.toolsStatus.items():
-                    tools_status_dict[tool_name] = tool_status.dict()
+                    tools_status_dict[tool_name] = tool_status.model_dump()
 
                 # Save structured data to Apify dataset
+                Actor.log.info(f"Tools statuses: {tools_status_dict}")
                 await Actor.push_data({
                     "mcpUrl": mcp_url,
                     "allTestsPassed": structured_result.allTestsPassed,
