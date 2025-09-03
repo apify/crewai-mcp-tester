@@ -18,4 +18,3 @@ apify_logger.addHandler(handler)
 
 # Execute the Actor entry point.
 asyncio.run(main())
-

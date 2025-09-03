@@ -1,4 +1,4 @@
-# CrewAI MCP Tester
+# CrewAI MCP tester
 
 It is important to ensure that your MCP server is functioning correctly and that all tools are available and working as expected. This Actor automates the manual testing process and provides a detailed report on the status of each tool.
 
@@ -16,13 +16,15 @@ Since MCP servers are often used in agentic-based applications, it is essential 
 - Token-based pricing model using [Pay per Event](https://docs.apify.com/sdk/js/docs/guides/pay-per-event)
 - Runs on Apify platform
 
-## 📊 Output Data
+## 📊 Output data
+
+The Actor returns individual records for each tool tested. Each record contains:
 
 | Field | Type | Description |
 |-------|------|-------------|
-| `mcpUrl` | String | The tested MCP server URL |
-| `allTestsPassed` | Boolean | Overall pass/fail status of all MCP server tests |
-| `toolsStatus` | Object | Detailed status of each tool with passed boolean and detail string |
+| `name` | String | Name of the MCP tool that was tested |
+| `passed` | Boolean | Whether the tool test passed (true/false) |
+| `detail` | String | Testing scenario description or explanation of failure |
 
 ## 🚀 Usage
 
@@ -56,44 +58,46 @@ The Actor accepts the following input parameters:
 
 ## 🔢 Output
 
-The Actor returns structured data in JSON format:
+The Actor returns individual records for each tool tested. Each record is a separate JSON object:
 
 ```json
-{
-  "mcpUrl": "https://mcp.apify.com",
-  "allTestsPassed": true,
-  "toolsStatus": {
-    "get-actor-details": {
-      "passed": true,
-      "detail": "Successfully retrieved detailed information about the actor 'apify/proxy-test'."
-    },
-    "search-actors": {
-      "passed": true,
-      "detail": "Successfully searched for actors with the keyword 'test' and received valid results."
-    },
-    "search-apify-docs": {
-      "passed": true,
-      "detail": "Successfully searched Apify documentation for the keyword 'test' and received relevant documentation links."
-    },
-    "fetch-apify-docs": {
-      "passed": true,
-      "detail": "Successfully fetched full content of an Apify documentation page about automated testing."
-    },
-    "add-actor": {
-      "passed": true,
-      "detail": "Successfully added the actor 'apify/proxy-test' to the available tools."
-    },
-    "apify-slash-rag-web-browser": {
-      "passed": true,
-      "detail": "Successfully ran a basic operation querying 'san francisco weather' and received results without errors."
-    }
+[
+  {
+    "name": "get-actor-details",
+    "passed": true,
+    "detail": "Successfully retrieved detailed information about the actor 'apify/proxy-test'."
+  },
+  {
+    "name": "search-actors",
+    "passed": true,
+    "detail": "Successfully searched for actors with the keyword 'test' and received valid results."
+  },
+  {
+    "name": "search-apify-docs",
+    "passed": true,
+    "detail": "Successfully searched Apify documentation for the keyword 'test' and received relevant documentation links."
+  },
+  {
+    "name": "fetch-apify-docs",
+    "passed": true,
+    "detail": "Successfully fetched full content of an Apify documentation page about automated testing."
+  },
+  {
+    "name": "add-actor",
+    "passed": true,
+    "detail": "Successfully added the actor 'apify/proxy-test' to the available tools."
+  },
+  {
+    "name": "apify-slash-rag-web-browser",
+    "passed": true,
+    "detail": "Successfully ran a basic operation querying 'san francisco weather' and received results without errors."
   }
-}
+]
 ```
 
 ## 🔧 Configuration
 
-### Custom Headers
+### Custom headers
 For MCP servers requiring authentication:
 
 ```json
@@ -106,7 +110,7 @@ For MCP servers requiring authentication:
 }
 ```
 
-## 🌐 Open Source
+## 🌐 Open source
 
 This Actor is open source and available on [GitHub](https://github.com/apify/crewai-mcp-tester).
 
