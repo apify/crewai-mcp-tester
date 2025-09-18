@@ -5,9 +5,12 @@ FROM apify/actor-python:3.12
 # in order to speed up the build
 COPY pyproject.toml uv.lock ./
 
-# Install Node.js and npm
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends nodejs npm && \
+# Update and install curl
+RUN apt-get update && apt-get install -y curl
+
+# Install Node.js 22.x LTS and npm
+RUN curl -fsSL https://deb.nodesource.com/setup_22.x | bash - && \
+    apt-get install -y --no-install-recommends nodejs && \
     npm install -g mcp-remote && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
